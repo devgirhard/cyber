@@ -1,0 +1,268 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--c1:#00f5ff;--c2:#7b2fff;--c3:#ff2fa0;--dark:#04080f;--card:#0a1628;--border:#1a3a5c;}
+#cyber-root{font-family:'Share Tech Mono',monospace;background:var(--dark);min-height:500px;position:relative;overflow:hidden;border-radius:12px;}
+canvas#matrix{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.13;pointer-events:none;z-index:0;}
+.screen{position:relative;z-index:2;width:100%;}
+.cy-header{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;border-bottom:1px solid #0ff2;background:linear-gradient(90deg,#04080fcc,#0a162899);backdrop-filter:blur(4px);}
+.cy-logo-wrap{position:relative;width:44px;height:44px;}
+.cy-logo-ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--c1);animation:spinRing 3s linear infinite;border-top-color:transparent;}
+.cy-logo-inner{position:absolute;inset:4px;border-radius:50%;background:#0a1628;display:flex;align-items:center;justify-content:center;font-size:18px;}
+@keyframes spinRing{to{transform:rotate(360deg);}}
+.cy-title-wrap .name{font-family:'Orbitron',monospace;font-size:15px;font-weight:900;background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;}
+.cy-title-wrap .sub{font-size:11px;color:#0ff9;letter-spacing:1px;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#0f0;box-shadow:0 0 8px #0f0;animation:pulse 1.5s ease-in-out infinite;margin-left:auto;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px #0f0;}50%{opacity:.4;box-shadow:0 0 2px #0f0;}}
+.login-wrap{display:flex;justify-content:center;padding:2rem 1rem;}
+.login-card{width:100%;max-width:340px;background:#0a1628;border:1px solid #0ff3;border-radius:12px;padding:2rem;position:relative;overflow:hidden;animation:fadeSlideUp .5s ease both;}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.login-card::before{content:'';position:absolute;top:-40%;left:-40%;width:180%;height:180%;background:conic-gradient(transparent 300deg,#00f5ff22 360deg);animation:rotateBorder 4s linear infinite;pointer-events:none;border-radius:50%;}
+@keyframes rotateBorder{to{transform:rotate(360deg);}}
+.login-card::after{content:'';position:absolute;inset:1px;background:#0a1628;border-radius:11px;z-index:0;}
+.login-inner{position:relative;z-index:1;}
+.login-title{font-family:'Orbitron',monospace;font-size:14px;color:var(--c1);letter-spacing:2px;margin-bottom:.25rem;}
+.login-sub{font-size:11px;color:#0ff7;margin-bottom:1.5rem;}
+.cy-label{font-size:11px;color:#0ff9;letter-spacing:1px;display:block;margin-bottom:6px;}
+.cy-input{width:100%;padding:10px 12px;background:#04080f;border:1px solid #0ff4;border-radius:6px;color:var(--c1);font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:1rem;}
+.cy-input:focus{border-color:var(--c1);box-shadow:0 0 12px #00f5ff33;}
+.cy-input::placeholder{color:#0ff4;}
+.btn-cyber{width:100%;padding:11px;border:none;border-radius:6px;cursor:pointer;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:2px;background:linear-gradient(135deg,var(--c2),var(--c1));color:#04080f;position:relative;overflow:hidden;transition:transform .1s,box-shadow .2s;}
+.btn-cyber:hover{transform:scale(1.02);box-shadow:0 0 20px #00f5ff55;}
+.btn-cyber:active{transform:scale(0.98);}
+.btn-cyber .shine{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,#fff4,transparent);animation:shine 2.5s ease infinite;}
+@keyframes shine{0%{left:-100%;}60%,100%{left:150%;}}
+.cy-err{font-size:11px;color:#ff2fa0;margin-top:-0.5rem;margin-bottom:0.75rem;display:none;letter-spacing:1px;}
+.plans-title{font-family:'Orbitron',monospace;font-size:12px;color:#0ff9;letter-spacing:3px;padding:1.25rem 1.25rem .75rem;animation:fadeSlideUp .4s ease both;}
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:0 1.25rem 1rem;}
+.plan-card{background:var(--card);border:1px solid #0ff2;border-radius:10px;padding:1.25rem 1rem;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;animation:fadeSlideUp .5s ease both;}
+.plan-card:nth-child(1){animation-delay:.05s;}
+.plan-card:nth-child(2){animation-delay:.15s;}
+.plan-card:nth-child(3){animation-delay:.25s;}
+.plan-card:hover{transform:translateY(-4px);border-color:var(--c1);box-shadow:0 0 20px #00f5ff22;}
+.plan-card.popular{border-color:var(--c2);box-shadow:0 0 16px #7b2fff33;}
+.plan-card.popular:hover{box-shadow:0 0 28px #7b2fff55;}
+.badge-pop{position:absolute;top:0;right:0;background:linear-gradient(135deg,var(--c2),var(--c3));font-size:9px;color:#fff;padding:4px 10px;border-radius:0 10px 0 8px;letter-spacing:1px;font-family:'Orbitron',monospace;}
+.plan-card-glow{position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 50% 0%,#00f5ff11,transparent 70%);transition:opacity .3s;pointer-events:none;}
+.plan-card:hover .plan-card-glow{opacity:1;}
+.plan-card.popular .plan-card-glow{background:radial-gradient(circle at 50% 0%,#7b2fff11,transparent 70%);opacity:1;}
+.plan-ico{font-size:24px;margin-bottom:10px;display:block;}
+.plan-name{font-family:'Orbitron',monospace;font-size:11px;color:var(--c1);letter-spacing:2px;margin-bottom:6px;}
+.plan-price{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:#fff;}
+.plan-price small{font-size:11px;color:#0ff7;font-weight:400;}
+.plan-dur{font-size:11px;color:#0ff7;margin-top:4px;}
+.btn-sel{width:100%;margin-top:12px;padding:8px;border-radius:6px;cursor:pointer;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:1px;background:transparent;border:1px solid #0ff4;color:var(--c1);transition:all .2s;}
+.btn-sel:hover{background:#00f5ff15;border-color:var(--c1);}
+.plan-card.popular .btn-sel{border-color:var(--c2);color:#a78fff;}
+.plan-card.popular .btn-sel:hover{background:#7b2fff15;}
+.feats{display:flex;gap:8px;flex-wrap:wrap;padding:0 1.25rem 1rem;}
+.feat{font-size:11px;color:#0f0;background:#0f010a11;border:1px solid #0f02;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:4px;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:10;backdrop-filter:blur(6px);animation:fadeIn .25s ease both;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal-box{background:#0a1628;border:1px solid #0ff3;border-radius:12px;padding:1.5rem;width:90%;max-width:320px;animation:fadeSlideUp .3s ease both;position:relative;}
+.modal-close{position:absolute;top:12px;right:14px;background:transparent;border:none;color:#0ff7;font-size:18px;cursor:pointer;line-height:1;}
+.modal-title{font-family:'Orbitron',monospace;font-size:13px;color:var(--c1);letter-spacing:2px;margin-bottom:.25rem;}
+.modal-sub{font-size:11px;color:#0ff7;margin-bottom:1rem;}
+.pix-box{background:#04080f;border:1px solid #0ff2;border-radius:8px;padding:1rem;text-align:center;margin-bottom:1rem;position:relative;overflow:hidden;}
+.pix-box::before{content:'PIX';position:absolute;top:4px;left:8px;font-size:9px;color:#0ff6;letter-spacing:2px;}
+.pix-k-label{font-size:10px;color:#0ff7;letter-spacing:1px;margin-bottom:6px;margin-top:6px;}
+.pix-key-row{display:flex;align-items:center;justify-content:center;gap:8px;}
+.pix-key{font-family:'Orbitron',monospace;font-size:15px;color:var(--c1);letter-spacing:2px;}
+.btn-copy{
+  background:transparent;border:1px solid #0ff4;border-radius:6px;
+  color:var(--c1);font-size:10px;font-family:'Orbitron',monospace;
+  padding:4px 10px;cursor:pointer;letter-spacing:1px;
+  transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:4px;
+}
+.btn-copy:hover{background:#00f5ff15;border-color:var(--c1);}
+.btn-copy.copied{border-color:#0f0;color:#0f0;background:#0f0015;}
+.pix-val{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;color:#0f0;margin-top:10px;text-shadow:0 0 12px #0f04;}
+.pix-steps{font-size:11px;color:#0ff8;line-height:2;margin-bottom:1rem;}
+.pix-steps span{color:#fff;}
+.btn-wpp{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border-radius:8px;text-decoration:none;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:1px;border:none;cursor:pointer;transition:transform .1s,box-shadow .2s;position:relative;overflow:hidden;}
+.btn-wpp:hover{transform:scale(1.02);box-shadow:0 0 18px #25D36655;}
+.btn-wpp .shine{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,#fff3,transparent);animation:shine 2s ease infinite;}
+.btn-back{width:100%;margin-top:8px;padding:8px;background:transparent;border:1px solid #0ff2;border-radius:6px;color:#0ff7;font-family:'Share Tech Mono',monospace;font-size:11px;cursor:pointer;transition:border-color .2s;}
+.btn-back:hover{border-color:#0ff6;}
+.logout-btn{margin-left:auto;background:transparent;border:1px solid #ff2fa033;border-radius:6px;padding:4px 10px;color:#ff2fa0;font-size:10px;font-family:'Orbitron',monospace;cursor:pointer;letter-spacing:1px;transition:border-color .2s,background .2s;}
+.logout-btn:hover{border-color:#ff2fa0;background:#ff2fa010;}
+</style>
+
+<div id="cyber-root">
+  <canvas id="matrix"></canvas>
+
+  <div id="login-screen" class="screen">
+    <div class="cy-header">
+      <div class="cy-logo-wrap"><div class="cy-logo-ring"></div><div class="cy-logo-inner">🤖</div></div>
+      <div class="cy-title-wrap"><div class="name">CYBER BOT</div><div class="sub">SISTEMA ONLINE</div></div>
+      <div class="status-dot"></div>
+    </div>
+    <div class="login-wrap">
+      <div class="login-card">
+        <div class="login-inner">
+          <div class="login-title">ACESSO</div>
+          <div class="login-sub">Insira suas credenciais</div>
+          <label class="cy-label">USUÁRIO</label>
+          <input class="cy-input" id="inp-user" type="text" placeholder="cliente" />
+          <label class="cy-label">SENHA</label>
+          <input class="cy-input" id="inp-pass" type="password" placeholder="••••••" />
+          <div class="cy-err" id="cy-err">⚠ ACESSO NEGADO — credenciais inválidas</div>
+          <button class="btn-cyber" onclick="doLogin()"><span class="shine"></span>ENTRAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="main-screen" class="screen" style="display:none;">
+    <div class="cy-header">
+      <div class="cy-logo-wrap"><div class="cy-logo-ring"></div><div class="cy-logo-inner">🤖</div></div>
+      <div class="cy-title-wrap"><div class="name">CYBER BOT</div><div class="sub">PLANOS OFICIAIS</div></div>
+      <div class="status-dot"></div>
+      <button class="logout-btn" onclick="doLogout()">SAIR</button>
+    </div>
+    <div class="plans-title">▸ ESCOLHA SEU PLANO</div>
+    <div class="plans-grid">
+      <div class="plan-card" onclick="openModal('Diário','R$ 5,00','1 dia')">
+        <div class="plan-card-glow"></div>
+        <span class="plan-ico">⚡</span>
+        <div class="plan-name">DIÁRIO</div>
+        <div class="plan-price">R$5 <small>/dia</small></div>
+        <div class="plan-dur">⏳ 1 dia de acesso</div>
+        <button class="btn-sel">SELECIONAR</button>
+      </div>
+      <div class="plan-card popular" onclick="openModal('Semanal','R$ 15,00','7 dias')">
+        <div class="badge-pop">★ TOP</div>
+        <div class="plan-card-glow"></div>
+        <span class="plan-ico">🔥</span>
+        <div class="plan-name">SEMANAL</div>
+        <div class="plan-price">R$15 <small>/semana</small></div>
+        <div class="plan-dur">📅 7 dias de acesso</div>
+        <button class="btn-sel">SELECIONAR</button>
+      </div>
+      <div class="plan-card" onclick="openModal('Mensal','R$ 30,00','30 dias')">
+        <div class="plan-card-glow"></div>
+        <span class="plan-ico">👑</span>
+        <div class="plan-name">MENSAL</div>
+        <div class="plan-price">R$30 <small>/mês</small></div>
+        <div class="plan-dur">🗓️ 30 dias de acesso</div>
+        <button class="btn-sel">SELECIONAR</button>
+      </div>
+    </div>
+    <div class="feats">
+      <div class="feat">✅ Bot rápido e eficiente</div>
+      <div class="feat">✅ Atualizações constantes</div>
+      <div class="feat">✅ Suporte disponível</div>
+    </div>
+  </div>
+
+  <div class="modal-bg" id="modal-bg" style="display:none;">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-title">PAGAMENTO PIX</div>
+      <div class="modal-sub" id="modal-desc">Plano selecionado</div>
+      <div class="pix-box">
+        <div class="pix-k-label">CHAVE PIX (CPF)</div>
+        <div class="pix-key-row">
+          <div class="pix-key">70847191133</div>
+          <button class="btn-copy" id="btn-copy" onclick="copyPix()">
+            <i class="ti ti-copy" aria-hidden="true"></i> COPIAR
+          </button>
+        </div>
+        <div class="pix-val" id="modal-price">R$ 15,00</div>
+      </div>
+      <div class="pix-steps">
+        <span>1.</span> Abra seu banco → acesse o PIX<br>
+        <span>2.</span> Cole a chave e informe o valor<br>
+        <span>3.</span> Pague e salve o comprovante<br>
+        <span>4.</span> Envie o comprovante pelo botão abaixo
+      </div>
+      <a class="btn-wpp" id="wpp-link" href="#" target="_blank">
+        <span class="shine"></span>
+        <i class="ti ti-brand-whatsapp" aria-hidden="true" style="font-size:18px;"></i>
+        ENVIAR COMPROVANTE
+      </a>
+      <button class="btn-back" onclick="closeModal()">← Voltar aos planos</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var c=document.getElementById('matrix');
+  var ctx=c.getContext('2d');
+  function resize(){c.width=c.offsetWidth;c.height=c.offsetHeight||500;}
+  resize();
+  var cols=Math.floor(c.width/14);
+  var drops=Array(cols).fill(1);
+  var chars='CYBERBOT01アイウエオ#$%&ABCDEF';
+  function draw(){
+    ctx.fillStyle='rgba(4,8,15,0.05)';ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle='#00f5ff';ctx.font='13px Share Tech Mono,monospace';
+    drops.forEach(function(y,i){
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*14,y*14);
+      if(y*14>c.height&&Math.random()>0.975)drops[i]=0;
+      drops[i]++;
+    });
+  }
+  setInterval(draw,50);
+})();
+
+function doLogin(){
+  var u=document.getElementById('inp-user').value.trim();
+  var p=document.getElementById('inp-pass').value.trim();
+  var err=document.getElementById('cy-err');
+  if(u==='cliente'&&p==='12345'){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('main-screen').style.display='block';
+    err.style.display='none';
+  } else {
+    err.style.display='block';
+    document.getElementById('inp-pass').style.borderColor='#ff2fa0';
+    setTimeout(function(){document.getElementById('inp-pass').style.borderColor='';},1500);
+  }
+}
+document.getElementById('inp-pass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+
+function doLogout(){
+  document.getElementById('main-screen').style.display='none';
+  document.getElementById('login-screen').style.display='block';
+  document.getElementById('inp-user').value='';
+  document.getElementById('inp-pass').value='';
+  closeModal();
+}
+
+function openModal(name,price,dur){
+  document.getElementById('modal-desc').textContent='Plano '+name+' — '+dur;
+  document.getElementById('modal-price').textContent=price;
+  var msg=encodeURIComponent('Olá! Quero alugar o CYBER BOT — Plano '+name+' ('+price+'). Segue meu comprovante:');
+  document.getElementById('wpp-link').href='https://wa.me/573237391374?text='+msg;
+  document.getElementById('modal-bg').style.display='flex';
+  var btn=document.getElementById('btn-copy');
+  btn.classList.remove('copied');
+  btn.innerHTML='<i class="ti ti-copy" aria-hidden="true"></i> COPIAR';
+}
+
+function closeModal(){document.getElementById('modal-bg').style.display='none';}
+
+function copyPix(){
+  var btn=document.getElementById('btn-copy');
+  navigator.clipboard.writeText('70847191133').then(function(){
+    btn.classList.add('copied');
+    btn.innerHTML='<i class="ti ti-check" aria-hidden="true"></i> COPIADO!';
+    setTimeout(function(){
+      btn.classList.remove('copied');
+      btn.innerHTML='<i class="ti ti-copy" aria-hidden="true"></i> COPIAR';
+    },2500);
+  }).catch(function(){
+    var t=document.createElement('textarea');
+    t.value='70847191133';document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
+    btn.classList.add('copied');
+    btn.innerHTML='<i class="ti ti-check" aria-hidden="true"></i> COPIADO!';
+    setTimeout(function(){
+      btn.classList.remove('copied');
+      btn.innerHTML='<i class="ti ti-copy" aria-hidden="true"></i> COPIAR';
+    },2500);
+  });
+}
+</script>
